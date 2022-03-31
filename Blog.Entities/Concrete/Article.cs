@@ -1,5 +1,6 @@
 ﻿using Blog.Shared.Entities.Abstract;
 using System;
+using System.Collections.Generic;
 
 namespace Blog.Entities.Concrete
 {
@@ -20,5 +21,6 @@ namespace Blog.Entities.Concrete
 
         public Category Category { get; set; }
         public User User { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }
