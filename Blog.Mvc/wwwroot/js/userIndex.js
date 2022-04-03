@@ -2,7 +2,7 @@
 
     /* DataTable */
 
-    $('#categoriesTable').DataTable({
+    $('#usersTable').DataTable({
         dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -23,7 +23,7 @@
                 action: function (e, dt, node, config) {
                     $.ajax({
                         type: 'GET',
-                        url: '/Admin/Category/GetAllCategories/',
+                        url: '/Admin/User/GetAllCategories/',
                         contentType: "application/json",
                         beforeSend: function () {
                             $('#categoriesTable').hide();
@@ -110,7 +110,7 @@
     /* Create */
 
     $(function () {
-        const url = '/Admin/Category/Add/';
+        const url = '/Admin/User/Add/';
         const placeHolderDiv = $('#modalPlaceHolder');
         $('#btnAdd').click(function () { // ekle butona basılırsa ajax işlemi başattık
             $.get(url).done(function (data) {
@@ -121,7 +121,7 @@
 
         placeHolderDiv.on('click', '#btnSave', function (event) {
             event.preventDefault();
-            const form = $('#form-category-add');
+            const form = $('#form-user-add');
             const actionUrl = form.attr('action');
             const dataToSend = form.serialize();
             $.post(actionUrl, dataToSend).done(function (data) {
