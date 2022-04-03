@@ -2,8 +2,7 @@
 
 namespace Blog.Entities.Concrete
 {
-    public class Role : IdentityRole<int>
+    public class UserToken : IdentityUserToken<int>
     {
-        // Microsoft.Extensions.Identity.Stores
     }
 }
