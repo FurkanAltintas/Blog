@@ -8,6 +8,7 @@ namespace Blog.Mvc.AutoMapper.Profiles
     {
         public UserProfile()
         {
+            // Kaynak => Varış Noktası
             CreateMap<UserAddDto, User>(); // UserAddDto'da ki verileri User sınıfına map edeceğiz.
             CreateMap<User, UserUpdateDto>(); // User içerisindeki verileri UserUpdateDto'ya veriyoruz
             CreateMap<UserUpdateDto, User>();
