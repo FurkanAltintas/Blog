@@ -2,7 +2,7 @@
 
     /* DataTable */
 
-    $('#categoriesTable').DataTable({
+    const dataTable = $('#categoriesTable').DataTable({
         dom: "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -31,29 +31,29 @@
                         },
                         success: function (data) {
                             const categoryListDto = jQuery.parseJSON(data);
-                            console.log(categoryListDto);
+                            dataTable.clear();
                             if (categoryListDto.ResultStatus === 0) {
-                                let tableBody = "";
                                 $.each(categoryListDto.Categories.$values, function (index, category) {
-                                    tableBody += `
-                                                        <tr>
-                                                            <td>${category.Id}</td>
-                                                            <td>${category.Name}</td>
-                                                            <td>${category.Description}</td>
-                                                            <td>${convertFirstLetterToUpperCase(category.IsActive.toString())}</td>
-                                                            <td>${convertFirstLetterToUpperCase(category.IsDeleted.toString())}</td>
-                                                            <td>${convertToShartDate(category.CreatedDate)}</td>
-                                                            <td>${category.CreatedByName}</td>
-                                                            <td>${convertToShartDate(category.ModifiedDate)}</td>
-                                                            <td>${category.ModifiedByName}</td>
-                                                            <td>${category.Note}</td>
-                                                            <td>
-                                                                <button class="btn btn-primary btn-sm btn-update" data-id="${category.Id}"><span class="fas fa-edit"></span></button>
-                                                                <button class="btn btn-danger btn-sm btn-delete" data-id="${category.Id}"><span class="fas fa-minus-circle"></span></button>
-                                                            </td>
-                                                        </tr>`;
+                                    const newTableRow = dataTable.row.add([
+                                        category.Id,
+                                        category.Name,
+                                        category.Description,
+                                        category.IsActive ? "True" : "False",
+                                        category.IsDelete ? "True" : "False",
+                                        convertToShartDate(category.CreatedDate),
+                                        category.CreatedByName,
+                                        convertToShartDate(category.ModifiedDate),
+                                        category.ModifiedByName,
+                                        category.Note,
+                                        `
+                                            <button class="btn btn-primary btn-sm btn-update" data-id="${category.Id}"><span class="fas fa-edit"></span></button>
+                                            <button class="btn btn-danger btn-sm btn-delete" data-id="${category.Id}"><span class="fas fa-minus-circle"></span></button>
+                                        `
+                                    ]).node(); // node fonksiyonu ile seçiyoruz.
+                                    const jqueryTableRow = $(newTableRow);
+                                    jqueryTableRow.attr('name', `${category.Id}`);
                                 });
-                                $('#categoriesTable > tbody').replaceWith(tableBody);
+                                dataTable.draw();
                                 $('.spinner-border').hide();
                                 $('#categoriesTable').fadeIn(1400);
                             } else {
