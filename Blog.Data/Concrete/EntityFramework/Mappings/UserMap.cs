@@ -1,6 +1,8 @@
 ﻿using Blog.Entities.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Blog.Data.Concrete.EntityFramework.Mappings
 {
@@ -45,6 +47,59 @@ namespace Blog.Data.Concrete.EntityFramework.Mappings
 
             builder.Property(u => u.Picture).IsRequired();
             builder.Property(u => u.Picture).HasMaxLength(250);
+
+            #region AdminUser
+            var adminUser = new User
+            {
+                Id = 1, // Identity yapısını string olarak kullanıyorsak guid ile yapmamız uygun olur
+                UserName = "adminuser",
+                NormalizedUserName = "ADMINUSER",
+                Email = "adminuser@gmail.com",
+                NormalizedEmail = "ADMINUSER@GMAIL.COM",
+                PhoneNumber = "+905555555555",
+                Picture = "defaultuser.png",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString() // ToString("D") yaparsanız '-' ifadesi eklenir
+            };
+            adminUser.PasswordHash = CreatePasswordHash(adminUser, "adminuser");
+            #endregion
+
+            #region EditorUser
+            var editorUser = new User
+            {
+                Id = 2, // Identity yapısını string olarak kullanıyorsak guid ile yapmamız uygun olur
+                UserName = "editoruser",
+                NormalizedUserName = "EDITORUSER",
+                Email = "editoruser@gmail.com",
+                NormalizedEmail = "EDITORUSER@GMAIL.COM",
+                PhoneNumber = "+905555555555",
+                Picture = "defaultuser.png",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            editorUser.PasswordHash = CreatePasswordHash(editorUser, "editoruser");
+            #endregion
+
+            builder.HasData(adminUser, editorUser);
+
+
+            #region Guid Kullanımı
+            /*
+                Guid.NewGuid().ToString() // Doğru Kullanım
+                "c83b3047-1c4b-4087-9849-83750a1cab36"
+                
+                new Guid().ToString() // Yanlış Kullanım
+                "00000000-0000-0000-0000-000000000000"
+             */
+            #endregion
+        }
+
+        private string CreatePasswordHash(User user, string password)
+        {
+            var passwordHasher = new PasswordHasher<User>();
+            return passwordHasher.HashPassword(user, password);
         }
     }
 }
