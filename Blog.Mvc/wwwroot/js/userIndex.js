@@ -55,10 +55,10 @@
                                 toastr.error(`${userListDto.Message}`, 'İşlem Başarısız!');
                             }
                         },
-                        error: function (err) {
+                        error: function (error) {
                             $('.spinner-border').hide();
                             $('#usersTable').fadeIn(1000);
-                            toastr.error(`${err.responseText}`, 'Hata!');
+                            toastr.error(`${error.responseText}`, 'Hata!');
                         }
                     });
                 }
@@ -156,8 +156,9 @@
                         toastr.warning(summaryText);
                     }
                 },
-                error: function (err) {
-                    console.log(err);
+                error: function (error) {
+                    console.log(error);
+                    toastr.error(`${error.responseText}`, 'Hata!');
                 }
             });
         });
@@ -204,8 +205,8 @@
                             });
                         }
                     },
-                    error: function (err) {
-                        toastr.error(`${err.responseText}`, "Hata!");
+                    error: function (error) {
+                        toastr.error(`${error.responseText}`, "Hata!");
                     }
                 });
             }
@@ -240,8 +241,10 @@
                 contentType: false,
                 success: function (data) {
                     const userUpdateAjaxModel = jQuery.parseJSON(data);
-                    const id = userUpdateAjaxModel.UserDto.User.Id;
-                    const tableRow = $(`[name="${id}"]`);
+                    if (userUpdateAjaxModel.UserDto !== null) {
+                        const id = userUpdateAjaxModel.UserDto.User.Id;
+                        const tableRow = $(`[name="${id}"]`);
+                    }
                     const newFormBody = $('.modal-body', userUpdateAjaxModel.UserUpdatePartial);
                     placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
                     const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
@@ -258,7 +261,7 @@
                                  <button class="btn btn-danger btn-sm btn-delete" data-id="${userUpdateAjaxModel.UserDto.User.Id}"><span class="fas fa-minus-circle"></span></button>
                             `
                         ]);
-                        tableRow.attr("name",`${id}`);
+                        tableRow.attr("name", `${id}`);
                         dataTable.row(tableRow).invalidate();
                         toastr.success(`${userUpdateAjaxModel.UserDto.Message}`, 'Başarılı İşlem!');
                     } else {
@@ -272,6 +275,7 @@
                 },
                 error: function (error) {
                     console.log(error);
+                    toastr.error(`${error.responseText}`, 'Hata!');
                 }
             });
         });
