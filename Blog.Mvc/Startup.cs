@@ -1,4 +1,6 @@
 using Blog.Mvc.AutoMapper.Profiles;
+using Blog.Mvc.Helpers.Abstract;
+using Blog.Mvc.Helpers.Concrete;
 using Blog.Services.AutoMapper.Profiles;
 using Blog.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +27,7 @@ namespace Blog.Mvc
             services.AddSession();
             services.AddAutoMapper(typeof(ArticleProfile), typeof(CategoryProfile), typeof(UserProfile));
             services.LoadMyServices();
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/Admin/User/Login");
