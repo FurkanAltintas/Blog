@@ -5,11 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Data.Concrete.EntityFramework.Contexts
 {
-    public class BlogContext : IdentityDbContext<User,Role,int,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
+    public class BlogContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public BlogContext(DbContextOptions<BlogContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-C8S1J58;Database=Blog;Trusted_Connection=True;Connect Timeout=30;MultipleActiveResultSets=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
