@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Blog.Shared.Utilities.Extensions
+
+@{
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+}
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
@@ -33,7 +40,9 @@
                 <div class="container-fluid">
                     <h1 class="mt-4">Dashboard</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">@TitleNamingExtensions.TitleNameByControllerName(controller)</a></li>
+                        <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="@controller" asp-action="@action">@ViewData["Title"]</a></li>
                     </ol>
 
                     @if (TempData["SuccessMessage"] != null)
