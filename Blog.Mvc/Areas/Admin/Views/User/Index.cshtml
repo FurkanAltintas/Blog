@@ -1,7 +1,12 @@
 ﻿@model UserListDto
 
+@{
+    ViewData["Title"] = "Index";
+}
+
 @if (Model.ResultStatus == ResultStatus.Success)
 {
+
     <div id="modalPlaceHolder" aria-hidden="true"></div>
     <div class="card mb-4">
         <div class="card-header">
@@ -67,5 +72,5 @@
 }
 
 @section Scripts {
-<script src="~/js/userIndex.js" type="application/ecmascript"></script>
+    <script src="~/js/userIndex.js" type="application/ecmascript"></script>
 }
