@@ -33,6 +33,26 @@ namespace Blog.Services.Concrete
             return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla eklenmiştir.");
         }
 
+        public async Task<IDataResult<int>> Count()
+        {
+            var articles = await _unitOfWork.Articles.CountAsync();
+            if (articles > -1)
+            {
+                return new DataResult<int>(ResultStatus.Success, articles);
+            }
+            return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı", -1);
+        }
+
+        public async Task<IDataResult<int>> CountByIsDeleted()
+        {
+            var articles = await _unitOfWork.Articles.CountAsync(a=> !a.IsDeleted);
+            if (articles > -1)
+            {
+                return new DataResult<int>(ResultStatus.Success, articles);
+            }
+            return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı", -1);
+        }
+
         public async Task<IResult> Delete(int articleId, string modifiedByName)
         {
             var result = await _unitOfWork.Articles.AnyAsync(a => a.Id == articleId);
