@@ -29,6 +29,7 @@ namespace Blog.Services.Extensions
             }).AddEntityFrameworkStores<BlogContext>();
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
+            serviceCollection.AddScoped<ICommentService, CommentManager>();
             serviceCollection.AddScoped<IArticleService, ArticleManager>();
 
             return serviceCollection;
