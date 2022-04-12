@@ -38,6 +38,26 @@ namespace Blog.Services.Concrete
             });
         }
 
+        public async Task<IDataResult<int>> Count()
+        {
+            var categories = await _unitOfWork.Categories.CountAsync();
+            if (categories > -1)
+            {
+                return new DataResult<int>(ResultStatus.Success, categories);
+            }
+            return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı", -1);
+        }
+
+        public async Task<IDataResult<int>> CountByIsDeleted()
+        {
+            var categories = await _unitOfWork.Categories.CountAsync(c => !c.IsDeleted);
+            if (categories > -1)
+            {
+                return new DataResult<int>(ResultStatus.Success, categories);
+            }
+            return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı", -1);
+        }
+
         public async Task<IDataResult<CategoryDto>> Delete(int categoryId, string modifiedByName)
         {
             var category = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryId);
