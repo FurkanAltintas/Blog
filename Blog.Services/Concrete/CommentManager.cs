@@ -29,7 +29,7 @@ namespace Blog.Services.Concrete
             return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı", -1);
         }
 
-        public async Task<IDataResult<int>> CountByIsDeleted()
+        public async Task<IDataResult<int>> CountByNonDeleted()
         {
             var comments = await _unitOfWork.Comments.CountAsync(c => !c.IsDeleted);
             if (comments > -1)
