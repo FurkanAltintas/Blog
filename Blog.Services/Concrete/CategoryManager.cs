@@ -48,7 +48,7 @@ namespace Blog.Services.Concrete
             return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı", -1);
         }
 
-        public async Task<IDataResult<int>> CountByIsDeleted()
+        public async Task<IDataResult<int>> CountByNonDeleted()
         {
             var categories = await _unitOfWork.Categories.CountAsync(c => !c.IsDeleted);
             if (categories > -1)
@@ -87,7 +87,7 @@ namespace Blog.Services.Concrete
 
         public async Task<IDataResult<CategoryDto>> Get(int categoryId)
         {
-            var category = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryId, c => c.Articles);
+            var category = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryId);
 
             if (category != null)
             {
@@ -108,7 +108,7 @@ namespace Blog.Services.Concrete
 
         public async Task<IDataResult<CategoryListDto>> GetAll()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync(null, c => c.Articles);
+            var categories = await _unitOfWork.Categories.GetAllAsync();
 
             if (categories.Count > -1)
             {
