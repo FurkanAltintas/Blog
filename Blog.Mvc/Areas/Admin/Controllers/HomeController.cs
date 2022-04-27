@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 namespace Blog.Mvc.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin,Editor")]
     public class HomeController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -27,13 +26,14 @@ namespace Blog.Mvc.Areas.Admin.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "SuperAdmin,Home.Read")]
         public async Task<IActionResult> Index()
         {
-            var categoriesCountResult = await _categoryService.CountByNonDeleted();
-            var articlesCountResult = await _articleService.CountByNonDeleted();
-            var commentsCountResult = await _commentService.CountByNonDeleted();
+            var categoriesCountResult = await _categoryService.CountByNonDeletedAsync();
+            var articlesCountResult = await _articleService.CountByNonDeletedAsync();
+            var commentsCountResult = await _commentService.CountByNonDeletedAsync();
             var usersCount = await _userManager.Users.CountAsync();
-            var articlesResult = await _articleService.GetAll();
+            var articlesResult = await _articleService.GetAllAsync();
             if (categoriesCountResult.ResultStatus == ResultStatus.Success && articlesCountResult.ResultStatus == ResultStatus.Success && commentsCountResult.ResultStatus == ResultStatus.Success && usersCount > -1 && articlesResult.ResultStatus == ResultStatus.Success)
             {
                 return View(new DashboardViewModel
