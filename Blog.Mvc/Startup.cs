@@ -24,20 +24,23 @@ namespace Blog.Mvc
         public IConfiguration Configuration { get; } // Okuma görevi görür
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(options =>
+            services.AddControllersWithViews(options =>
+            {
+                options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Bu alan boþ geçilmemelidir."); // Diðer alanlar için de bu alan geçerlidir.
+            }).AddRazorRuntimeCompilation().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-            });
+            }).AddNToastNotifyToastr();
             services.AddSession();
-            services.AddAutoMapper(typeof(ArticleProfile), typeof(CategoryProfile), typeof(UserProfile));
+            services.AddAutoMapper(typeof(ArticleProfile), typeof(CategoryProfile), typeof(UserProfile), typeof(ViewModelsProfile), typeof(CommentProfile));
             services.LoadMyServices(connectionString: Configuration.GetConnectionString("LocalDB"));
             services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = new PathString("/Admin/User/Login");
-                options.LogoutPath = new PathString("/Admin/User/Logout");
-                options.AccessDeniedPath = new PathString("/Admin/User/AccessDenied"); // Sistem içerisinde giriþ yapmýþ ama yetkisi olmayan bir yere ulaþýrsa bu sayfaya yönlendirilir
+                options.LoginPath = new PathString("/Admin/Auth/Login");
+                options.LogoutPath = new PathString("/Admin/Auth/Logout");
+                options.AccessDeniedPath = new PathString("/Admin/Auth/AccessDenied"); // Sistem içerisinde giriþ yapmýþ ama yetkisi olmayan bir yere ulaþýrsa bu sayfaya yönlendirilir
                 options.Cookie = new CookieBuilder
                 {
                     Name = "Blog",
@@ -63,6 +66,8 @@ namespace Blog.Mvc
             app.UseRouting();
             app.UseAuthentication(); // Kimlik kontrolü
             app.UseAuthorization(); // Yetki kontrolü
+            app.UseNToastNotify();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
