@@ -1,0 +1,79 @@
+﻿@model CategoryListDto
+
+@{
+    ViewData["Title"] = "Silinmiş Kategoriler";
+}
+
+<div id="modalPlaceHolder" aria-hidden="true"></div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Silinmiş Kategoriler
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status" style="display: none;">
+                <span class="visually-hidden"></span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="deletedCategoriesTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Adı</th>
+                        <th>Açıklaması</th>
+                        <th>Aktif Mi?</th>
+                        <th>Silinmiş Mi?</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Oluşturan Kullanıcı Adı</th>
+                        <th>Son Düzenlenme Tarihi</th>
+                        <th>Son Düzenleyen Kullanıcı</th>
+                        <th>Not</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Adı</th>
+                        <th>Açıklaması</th>
+                        <th>Aktif Mi?</th>
+                        <th>Silinmiş Mi?</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Oluşturan Kullanıcı Adı</th>
+                        <th>Son Düzenlenme Tarihi</th>
+                        <th>Son Düzenleyen Kullanıcı</th>
+                        <th>Not</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr name="@category.Id">
+                            <td>@category.Id</td>
+                            <td>@category.Name</td>
+                            <td>@category.Description</td>
+                            <td>@(category.IsActive ? "Evet":"Hayır")</td>
+                            <td>@(category.IsDeleted ? "Evet":"Hayır")</td>
+                            <td>@category.CreatedDate.ToShortDateString()</td>
+                            <td>@category.CreatedByName</td>
+                            <td>@category.ModifiedDate.ToShortDateString()</td>
+                            <td>@category.ModifiedByName</td>
+                            <td>@category.Note</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm btn-undo" data-id="@category.Id"><span class="fas fa-undo"></span></button>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/AdminLTE/js/deletedCategories.js" type="application/ecmascript"></script>
+}
