@@ -39,8 +39,8 @@
                                         category.Id,
                                         category.Name,
                                         category.Description,
-                                        category.IsActive ? "True" : "False",
-                                        category.IsDelete ? "True" : "False",
+                                        category.IsActive ? "Evet" : "Hayır",
+                                        category.IsDelete ? "Evet" : "Hayır",
                                         convertToShartDate(category.CreatedDate),
                                         category.CreatedByName,
                                         convertToShartDate(category.ModifiedDate),
@@ -137,8 +137,8 @@
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.Id}</td>
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
-                                <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
-                                <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.IsActive ? "Evet" : "Hayır"}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.IsDeleted ? "Evet" : "Hayır"}</td>
                                 <td>${convertToShartDate(categoryAddAjaxModel.CategoryDto.Category.CreatedDate)}</td>
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedByName}</td>
                                 <td>${convertToShartDate(categoryAddAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
@@ -246,8 +246,8 @@
                                 <td>${categoryUpdateAjaxModel.CategoryDto.Category.Id}</td>
                                 <td>${categoryUpdateAjaxModel.CategoryDto.Category.Name}</td>
                                 <td>${categoryUpdateAjaxModel.CategoryDto.Category.Description}</td>
-                                <td>${convertFirstLetterToUpperCase(categoryUpdateAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
-                                <td>${convertFirstLetterToUpperCase(categoryUpdateAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
+                                <td>${categoryUpdateAjaxModel.CategoryDto.Category.IsActive ? "Evet" : "Hayır"}</td>
+                                <td>${categoryUpdateAjaxModel.CategoryDto.Category.IsDeleted ? "Evet" : "Hayır"}</td>
                                 <td>${convertToShartDate(categoryUpdateAjaxModel.CategoryDto.Category.CreatedDate)}</td>
                                 <td>${categoryUpdateAjaxModel.CategoryDto.Category.CreatedByName}</td>
                                 <td>${convertToShartDate(categoryUpdateAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
