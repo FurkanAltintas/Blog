@@ -4,8 +4,10 @@ using Blog.Data.Concrete.EntityFramework.Contexts;
 using Blog.Entities.Concrete;
 using Blog.Services.Abstract;
 using Blog.Services.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Blog.Services.Extensions
 {
@@ -27,6 +29,11 @@ namespace Blog.Services.Extensions
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+$"; // Kullanıcı adı oluşturulurken verilen karakterler (Karakterleri yan yana yazmamız gerekmektedir.)
                 options.User.RequireUniqueEmail = true; // Bir kullanıcı kayıt olurken bu email adresinden sadece bir kayıt mı bulunsun ?
             }).AddEntityFrameworkStores<BlogContext>();
+            serviceCollection.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.FromMinutes(15);  // Kontrol süresini ayarlamamızı sağlıyor. Bu kontrol yapıldığında veritabanına bir istekte bulunulunuyor.
+                // Bir kullanıcıda rol ataması yapıldıktan sonra 15 dakika içerisinde logout olucak ve giriş yapması gerekicek.
+            });
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<ICommentService, CommentManager>();
