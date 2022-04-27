@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Blog.Shared.Utilities.Extensions
+﻿namespace Blog.Shared.Utilities.Extensions
 {
     public static class TitleNamingExtensions
     {
