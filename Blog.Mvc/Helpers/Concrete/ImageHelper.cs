@@ -1,4 +1,5 @@
-﻿using Blog.Entities.Dtos;
+﻿using Blog.Entities.ComplexTypes;
+using Blog.Entities.Dtos;
 using Blog.Mvc.Helpers.Abstract;
 using Blog.Shared.Utilities.Extensions;
 using Blog.Shared.Utilities.Results.Abstract;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Blog.Mvc.Helpers.Concrete
@@ -16,7 +18,9 @@ namespace Blog.Mvc.Helpers.Concrete
     {
         private readonly IWebHostEnvironment _env;
         private readonly string _wwwroot;
-        private readonly string imgFolder = "img";
+        private const string imgFolder = "img";
+        private const string userImagesFolder = "userImages";
+        private const string postImagesFolder = "postImages";
 
         public ImageHelper(IWebHostEnvironment env)
         {
@@ -47,24 +51,50 @@ namespace Blog.Mvc.Helpers.Concrete
             }
         }
 
-        public async Task<IDataResult<ImageUploadedDto>> UploadUserImage(string userName, IFormFile pictureFile, string folderName = "userImages")
+        public async Task<IDataResult<ImageUploadedDto>> Upload(string name, IFormFile pictureFile, PictureType pictureType, string folderName = null)
         {
+            /* Eğer folderName değişkeni null gelir ise, o zaman resim tipine göre (PictureType) klasör adı ataması yapılır. */
+            folderName ??= pictureType == PictureType.User ? userImagesFolder : postImagesFolder;
+
+            /* Eğer folderName değişkeni ile gelen klasör adı sistemimizde mevcut değilse, yeni bir klasör oluşturulur. */
             if (!Directory.Exists($"{_wwwroot}/{imgFolder}/{folderName}")) // Böyle bir klasör yoksa ?
             {
                 Directory.CreateDirectory($"{_wwwroot}/{imgFolder}/{folderName}"); // klasörü oluşturuyoruz
             }
 
+            /* Resimin yüklenme sırasındaki ilk adı oldFileName adlı değişkene atanır. */
             string oldFileName = Path.GetFileNameWithoutExtension(pictureFile.FileName); // Resmin ilk adını burada saklıyoruz
-            string fileExtension = Path.GetExtension(pictureFile.FileName); // Resmin uzantısını saklıyoruz.
+
+            /* Resimin uzantısı fileExtension adlı değişkene atanır. */
+            string fileExtension = Path.GetExtension(pictureFile.FileName); // Resmin uzantısını saklıyoruz
+
+
+            Regex regex = new("[*'\",._&#^@]");
+            name = regex.Replace(name, string.Empty); // Bunların silinmesini ve yerine boşluk gelmesini istiyoruz.
+
             DateTime dateTime = DateTime.Now;
-            string newFileName = $"{userName}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
+            /*
+                Parametre ile gelen değerler kullanılarak yeni bir resim adı oluşturulur.
+                Örnek: FurkanAltintas_587_5_38_12_3_10_2021.jpg
+             */
+
+            string newFileName = $"{name}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
+
+            /* Kendi parametrelerimiz ile sistemimize uygun yeni bir dosya yolu (path) oluşturulur. */
             var path = Path.Combine($"{_wwwroot}/{imgFolder}/{folderName}", newFileName);
+
+            /*  Sistemimiz için oluşturulan yeni dosya yoluna resim kopyalanır. */
             await using (var stream = new FileStream(path, FileMode.Create))
             {
                 await pictureFile.CopyToAsync(stream);
             }
 
-            return new DataResult<ImageUploadedDto>(ResultStatus.Success, $"{userName} adlı kullanıcının resimi başarıyla yüklenmiştir", new ImageUploadedDto
+            /* Rresim tipine göre kullanıcı için bir mesaj oluşturulur. */
+            string message = pictureType == PictureType.User
+                ? $"{name} adlı kullanıcının resimi başarıyla yüklenmiştir."
+                : $"{name} adlı makalenin resimi başarıyla yüklenmiştir.";
+
+            return new DataResult<ImageUploadedDto>(ResultStatus.Success, message, new ImageUploadedDto
             {
                 FullName = $"{folderName}/{newFileName}",
                 OldName = oldFileName,
