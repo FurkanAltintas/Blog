@@ -10,6 +10,21 @@ namespace Blog.Data.Concrete.EntityFramework.Mappings
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.Property(u => u.Picture).IsRequired();
+            builder.Property(u => u.Picture).HasMaxLength(250);
+            // Social Media Links
+            builder.Property(u => u.YoutubeLink).HasMaxLength(250);
+            builder.Property(u => u.TwitterLink).HasMaxLength(250);
+            builder.Property(u => u.InstagramLink).HasMaxLength(250);
+            builder.Property(u => u.FacebookLink).HasMaxLength(250);
+            builder.Property(u => u.LinkedInLink).HasMaxLength(250);
+            builder.Property(u => u.GitHubLink).HasMaxLength(250);
+            builder.Property(u => u.WebsiteLink).HasMaxLength(250);
+            // About
+            builder.Property(u => u.FirstName).HasMaxLength(30);
+            builder.Property(u => u.LastName).HasMaxLength(30);
+            builder.Property(u => u.About).HasMaxLength(1000);
+
             // Primary key
             builder.HasKey(u => u.Id);
 
@@ -18,7 +33,7 @@ namespace Blog.Data.Concrete.EntityFramework.Mappings
             builder.HasIndex(u => u.NormalizedEmail).HasDatabaseName("EmailIndex");
 
             // Maps to the AspNetUsers table
-            builder.ToTable("AspNetUsers");
+            builder.ToTable("Users");
 
             // A concurrency token for use with the optimistic concurrency checking
             builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
@@ -44,56 +59,56 @@ namespace Blog.Data.Concrete.EntityFramework.Mappings
             // Each User can have many entries in the UserRole join table
             builder.HasMany<UserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
-
-            builder.Property(u => u.Picture).IsRequired();
-            builder.Property(u => u.Picture).HasMaxLength(250);
-
-            #region AdminUser
             var adminUser = new User
             {
-                Id = 1, // Identity yapısını string olarak kullanıyorsak guid ile yapmamız uygun olur
+                Id = 1,
                 UserName = "adminuser",
                 NormalizedUserName = "ADMINUSER",
                 Email = "adminuser@gmail.com",
                 NormalizedEmail = "ADMINUSER@GMAIL.COM",
                 PhoneNumber = "+905555555555",
-                Picture = "defaultuser.png",
+                Picture = "/userImages/defaultUser.png",
+                FirstName = "Admin",
+                LastName = "User",
+                About = "Admin User of ProgrammersBlog",
+                TwitterLink = "https://twitter.com/adminuser",
+                InstagramLink = "https://instagram.com/adminuser",
+                YoutubeLink = "https://youtube.com/adminuser",
+                GitHubLink = "https://github.com/adminuser",
+                LinkedInLink = "https://linkedin.com/adminuser",
+                WebsiteLink = "https://programmersblog.com/",
+                FacebookLink = "https://facebook.com/adminuser",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString() // ToString("D") yaparsanız '-' ifadesi eklenir
+                SecurityStamp = Guid.NewGuid().ToString()
             };
             adminUser.PasswordHash = CreatePasswordHash(adminUser, "adminuser");
-            #endregion
-
-            #region EditorUser
             var editorUser = new User
             {
-                Id = 2, // Identity yapısını string olarak kullanıyorsak guid ile yapmamız uygun olur
+                Id = 2,
                 UserName = "editoruser",
                 NormalizedUserName = "EDITORUSER",
                 Email = "editoruser@gmail.com",
                 NormalizedEmail = "EDITORUSER@GMAIL.COM",
                 PhoneNumber = "+905555555555",
-                Picture = "defaultuser.png",
+                Picture = "/userImages/defaultUser.png",
+                FirstName = "Admin",
+                LastName = "User",
+                About = "Editor User of ProgrammersBlog",
+                TwitterLink = "https://twitter.com/editoruser",
+                InstagramLink = "https://instagram.com/editoruser",
+                YoutubeLink = "https://youtube.com/editoruser",
+                GitHubLink = "https://github.com/editoruser",
+                LinkedInLink = "https://linkedin.com/editoruser",
+                WebsiteLink = "https://programmersblog.com/",
+                FacebookLink = "https://facebook.com/editoruser",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             editorUser.PasswordHash = CreatePasswordHash(editorUser, "editoruser");
-            #endregion
 
             builder.HasData(adminUser, editorUser);
-
-
-            #region Guid Kullanımı
-            /*
-                Guid.NewGuid().ToString() // Doğru Kullanım
-                "c83b3047-1c4b-4087-9849-83750a1cab36"
-                
-                new Guid().ToString() // Yanlış Kullanım
-                "00000000-0000-0000-0000-000000000000"
-             */
-            #endregion
         }
 
         private string CreatePasswordHash(User user, string password)
