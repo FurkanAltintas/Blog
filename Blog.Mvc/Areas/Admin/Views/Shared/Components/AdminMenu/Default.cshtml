@@ -22,18 +22,35 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                     Yorumlar
                 </a>
-                @if (Model.Roles.Any(r => r.Equals("Admin"))) // Admin değerine eşit mi
+                <div class="sb-sidenav-menu-heading">Kullanıcılar</div>
+                @if (Model.Roles.Any(r => r.Equals("SuperAdmin") || r.Equals("Role.Read"))) // Admin değerine eşit mi
                 {
-                    <div class="sb-sidenav-menu-heading">Kullanıcılar</div>
                     <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
                         <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
                         Roller
                     </a>
+                }
+                @if (Model.Roles.Any(r => r.Equals("SuperAdmin") || r.Equals("User.Read"))) // Admin değerine eşit mi
+                {
                     <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
                         <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                         Kullanıcılar
                     </a>
                 }
+                <div class="sb-sidenav-menu-heading">Diğer</div>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-archive"></i></div>
+                    Arşiv
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a asp-area="Admin" asp-controller="Category" asp-action="DeletedCategories" class="nav-link">Kategoriler</a>
+                        <a asp-area="Admin" asp-controller="Article" asp-action="DeletedArticles" class="nav-link">Makaleler</a>
+                        <a asp-area="Admin" asp-controller="Comment" asp-action="DeletedComments" class="nav-link">Yorumlar</a>
+                    </nav>
+                </div>
+
             </div>
         </div>
         <div class="sb-sidenav-footer">
