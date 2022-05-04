@@ -1,0 +1,58 @@
+﻿@model ArticleDto
+
+@{
+    Layout = "_ArticleLayout";
+    ViewData["Title"] = Model.Article.Title;
+    ViewBag.Description = Model.Article.SeoDescription;
+    ViewBag.Author = Model.Article.CreatedByName;
+    ViewBag.Tags = Model.Article.SeoTags;
+
+}
+
+<!-- Post Content Column -->
+<div class="col-lg-8">
+
+    <!-- Title -->
+    <h1 class="mt-4">@Model.Article.Title</h1>
+
+    <!-- Author -->
+    <p>@Model.Article.CreatedByName tarafından @Model.Article.Date.ToShortDateString() tarihinde paylaşılmıştır.</p>
+
+    <hr>
+
+    <!-- Preview Image -->
+    <img class="img-fluid rounded" src="~/img/@Model.Article.Thumbnail" alt="@Model.Article.Title">
+
+    <hr>
+
+    <!-- Post Content -->
+    @Html.Raw(Model.Article.Content)
+
+    <hr>
+
+    <div class="text-center">
+        Okunma Sayısı: <span class="badge badge-primary">@Model.Article.ViewCount</span>
+        Yorum Sayısı: <span class="badge badge-warning">@Model.Article.CommentCount</span>
+    </div>
+
+    <!-- Comments Form -->
+    <partial name="~/Views/Comment/_CommentAddPartial.cshtml" model="new CommentAddDto { ArticleId = Model.Article.Id }" />
+
+    <div id="comments">
+        @foreach (var comment in Model.Article.Comments)
+        {
+            <!-- Single Comment -->
+            <div class="media mb-4">
+                <img class="d-flex mr-3 rounded-circle" src="https://randomuser.me/api/portraits/women/17.jpg" alt="">
+                <div class="media-body">
+                    <h5 class="mt-0">@comment.CreatedByName</h5>
+                    @comment.Text
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/BlogHome/js/articleDetail.js" type="application/ecmascript"></script>
+}
