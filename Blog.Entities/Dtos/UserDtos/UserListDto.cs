@@ -1,6 +1,5 @@
 ﻿using Blog.Entities.Concrete;
 using Blog.Shared.Entities.Abstract;
-using System;
 using System.Collections.Generic;
 
 namespace Blog.Entities.Dtos
