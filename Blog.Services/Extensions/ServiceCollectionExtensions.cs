@@ -16,6 +16,7 @@ namespace Blog.Services.Extensions
         public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection, string connectionString)
         {
             serviceCollection.AddDbContext<BlogContext>(options => options.UseSqlServer(connectionString));
+
             serviceCollection.AddIdentity<User, Role>(options =>
             {
                 // User Password Options
@@ -29,15 +30,18 @@ namespace Blog.Services.Extensions
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+$"; // Kullanıcı adı oluşturulurken verilen karakterler (Karakterleri yan yana yazmamız gerekmektedir.)
                 options.User.RequireUniqueEmail = true; // Bir kullanıcı kayıt olurken bu email adresinden sadece bir kayıt mı bulunsun ?
             }).AddEntityFrameworkStores<BlogContext>();
+
             serviceCollection.Configure<SecurityStampValidatorOptions>(options =>
             {
                 options.ValidationInterval = TimeSpan.FromMinutes(15);  // Kontrol süresini ayarlamamızı sağlıyor. Bu kontrol yapıldığında veritabanına bir istekte bulunulunuyor.
                 // Bir kullanıcıda rol ataması yapıldıktan sonra 15 dakika içerisinde logout olucak ve giriş yapması gerekicek.
             });
+
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<ICommentService, CommentManager>();
             serviceCollection.AddScoped<IArticleService, ArticleManager>();
+            serviceCollection.AddSingleton<IMailService, MailManager>();
 
             return serviceCollection;
         }
