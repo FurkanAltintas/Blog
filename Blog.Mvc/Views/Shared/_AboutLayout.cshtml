@@ -1,25 +1,18 @@
-﻿@using Microsoft.Extensions.Options
-@inject IOptionsSnapshot<WebsiteInfo> WebsiteInfo
-
-@{
-    var websiteInfo = WebsiteInfo.Value;
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="@websiteInfo.SeoDescription">
-    <meta name="author" content="@websiteInfo.SeoAuthor">
-    <meta name="keywords" content="@websiteInfo.SeoTags">
-    <title>@ViewData["Title"] - @websiteInfo.Title</title>
-    <link href="~/BlogHome/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="author" content="@ViewBag.Author">
+    <meta name="keywords" content="@ViewBag.Tags" />
+    <title>@ViewData["Title"] - Blog</title>
+    <link href="~/BlogHome/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/BlogHome/css/blog-home.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+    <link href="~/BlogHome/css/site.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -35,7 +28,7 @@
             @RenderBody()
 
             <!-- Sidebar Widgets Column -->
-            @await Component.InvokeAsync("RightSideBar")
+            
 
         </div>
         <!-- /.row -->
