@@ -14,8 +14,14 @@
                     return "Kategoriler";
                 case "User":
                     return "Kullanıcılar";
+                case "Options":
+                    return "Ayarlar";
+                case "Comment":
+                    return "Yorumlar";
+                case "Role":
+                    return "Roller";
                 default:
-                    return "";
+                    return controller;
             }
         }
     }

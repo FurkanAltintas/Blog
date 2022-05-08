@@ -1,8 +1,11 @@
+using Blog.Entities.Concrete;
 using Blog.Mvc.AutoMapper.Profiles;
+using Blog.Mvc.Filters;
 using Blog.Mvc.Helpers.Abstract;
 using Blog.Mvc.Helpers.Concrete;
 using Blog.Services.AutoMapper.Profiles;
 using Blog.Services.Extensions;
+using Blog.Shared.Utilities.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,9 +27,21 @@ namespace Blog.Mvc
         public IConfiguration Configuration { get; } // Okuma görevi görür
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
+            services.Configure<WebsiteInfo>(Configuration.GetSection("WebsiteInfo"));
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+            services.Configure<ArticleRightSideBarWidgetOptions>(Configuration.GetSection("ArticleRightSideBarWidgetOptions"));
+
+            services.ConfigureWritable<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
+            services.ConfigureWritable<WebsiteInfo>(Configuration.GetSection("WebsiteInfo"));
+            services.ConfigureWritable<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+            services.ConfigureWritable<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
+            services.ConfigureWritable<ArticleRightSideBarWidgetOptions>(Configuration.GetSection("ArticleRightSideBarWidgetOptions"));
+
             services.AddControllersWithViews(options =>
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Bu alan boþ geçilmemelidir."); // Diðer alanlar için de bu alan geçerlidir.
+                options.Filters.Add<MvcExceptionFilter>();
             }).AddRazorRuntimeCompilation().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
