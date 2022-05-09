@@ -1,4 +1,5 @@
 ﻿using Blog.Entities.Concrete;
+using Blog.Mvc.Attributes;
 using Blog.Mvc.Models;
 using Blog.Services.Abstract;
 using Blog.Shared.Utilities.Results.ComplexTypes;
@@ -32,6 +33,7 @@ namespace Blog.Mvc.Controllers
         }
 
         [HttpGet]
+        [ViewCountFilterAttribute] // Artık Detail Action her çalıştırıldığında bu filter da çalışacak
         public async Task<IActionResult> Detail(int articleId)
         {
             var articleResult = await _articleService.GetAsync(articleId);
@@ -39,7 +41,7 @@ namespace Blog.Mvc.Controllers
             {
                 var userArticles = await _articleService.GetAllByUserIdOnFilter(articleResult.Data.Article.UserId, _articleRightSideBarWidgetOptions.FilterBy, _articleRightSideBarWidgetOptions.OrderBy, _articleRightSideBarWidgetOptions.IsAscending, _articleRightSideBarWidgetOptions.TakeSize, _articleRightSideBarWidgetOptions.CategoryId, _articleRightSideBarWidgetOptions.StartAt, _articleRightSideBarWidgetOptions.EndAt, _articleRightSideBarWidgetOptions.MinViewCount, _articleRightSideBarWidgetOptions.MaxViewCount, _articleRightSideBarWidgetOptions.MinCommentCount, _articleRightSideBarWidgetOptions.MaxCommentCount);
 
-                await _articleService.IncreaseViewCountAsync(articleId);
+                //await _articleService.IncreaseViewCountAsync(articleId);
                 return View(new ArticleDetailViewModel
                 {
                     ArticleDto = articleResult.Data,

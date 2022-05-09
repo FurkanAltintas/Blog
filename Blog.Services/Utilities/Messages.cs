@@ -4,12 +4,25 @@
     {
         // Messages.Category.NotFound()
 
+        public static class General
+        {
+            public static string ValidationError()
+            {
+                return "Bir veya daha fazla validasyon hatası ile karşılaşıldı.";
+            }
+        }
+
         public static class Category
         {
             public static string NotFound(bool isPlural) // true gelirse çoğul, false gelirse tekil.
             {
                 if (isPlural) return "Hiç bir kategori bulunamadı";
                 return "Böyle bir kategori bulunamadı";
+            }
+
+            public static string NotFoundById(int categoryId)
+            {
+                return $"{categoryId} kategori koduna ait bir kategori bulunamadı.";
             }
 
             public static string Add(string categoryName)
@@ -44,6 +57,11 @@
             {
                 if (isPlural) return "Hiç bir makale bulunamadı";
                 return "Böyle bir makale bulunamadı";
+            }
+
+            public static string NotFoundById(int articleId)
+            {
+                return $"{articleId} makale koduna ait bir makale bulunamadı.";
             }
 
             public static string Add(string articleTitle)
@@ -111,6 +129,45 @@
             public static string UndoDelete(string createdByName)
             {
                 return $"{createdByName} tarafından eklenen yorum başarıyla arşivden geri getirilmiştir.";
+            }
+        }
+
+        public static class User
+        {
+            public static string NotFound(bool isPlural) // true gelirse çoğul, false gelirse tekil.
+            {
+                if (isPlural) return "Hiç bir kullanıcı bulunamadı";
+                return "Böyle bir kullanıcı bulunamadı";
+            }
+
+            public static string NotFoundById(int userId)
+            {
+                return $"{userId} kullanıcı koduna ait bir kullanıcı bulunamadı.";
+            }
+
+            public static string Add(string userName)
+            {
+                return $"{userName} adlı kullanıcı başarıyla eklenmiştir.";
+            }
+
+            public static string Update(string userName)
+            {
+                return $"{userName} adlı kullanıcı başarıyla güncellenmiştir.";
+            }
+
+            public static string Delete(string userName)
+            {
+                return $"{userName} adlı kullanıcı başarıyla silinmiştir.";
+            }
+
+            public static string HardDelete(string userName)
+            {
+                return $"{userName} adlı kullanıcı başarıyla veritabanından silinmiştir.";
+            }
+
+            public static string UndoDelete(string userName)
+            {
+                return $"{userName} adlı kullanıcı başarıyla arşivden geri getirilmiştir.";
             }
         }
     }
